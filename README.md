@@ -45,7 +45,7 @@ this game is written in C, and uses the "miniLibX", a graphic library of 42 Netw
 
 ## Usage
 This program has an additional difficulty to compile, as it doesn't use a standar C graphic library, but one that 42 uses. In order to compile, you must do the following:
-1. If you are on Mac or Linux, you can just compile with the Makefile:
+1. If you are on Mac or Linux, you can just compile with the Makefile (thanks to [ManMartin](https://github.com/Manmartin) for the help on how to make this makefile). There will be warnings because of the Minilibx library:
 	* make: it compiles directly
     * make re: if the project is already compiled, it does it again
     * make clean. Deletes all .o files but the executables remain
