@@ -3,45 +3,58 @@ SRCS	=	main.c exits.c ./parser/filler.c ./parser/parser.c \
 			./parser/parse_map.c ./mlx_items/images.c ./minimap/window.c ./movement.c \
 			./raycaster/raycaster.c ./mlx_items/colors.c
 
-NAME	=	cub3D
+NAME = cub3D
 
-DIRLIBFT =  ./libft/libft.a
+CC = clang
 
-DIRGNL		= ./gnl/get_next_line.a
+CFLAGS = -Wall -Wextra -Werror -O2
+
+INC = -I inc -I libft
+
+LIBFT = ./libft/libft.a
+
+GNL = ./gnl/get_next_line.a
+
+ifeq ($(shell uname), Linux)
+	INC += -I inc/linux -I mlx_linux
+	MLX = ./mlx_linux/libmlx.a
+	MLX_D = mlx_linux
+	MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+else
+	INC += -I inc/mac -I mlx_mac
+	MLX = ./mlx_mac/libmlx.a
+	MLX_D = mlx_mac
+	MLX_FLAGS = -framework OpenGL -framework AppKit
+endif
+
+OBJS = $(SRCS:.c=.o)
 
 MAKELIBFT = cd ./libft/ && ${MAKE}
 
 MAKEGNL = cd ./gnl/ && ${MAKE}
 
-OBJS	=	${SRCS:.c=.o}
-
-CFLAGS	=	-Wall -Wextra -Werror -I /usr/local/include #-g3 -fsanitize=address
-
-MINILIBX = -L /usr/local/lib/ -lmlx -framework OpenGL -framework AppKit
-
-CC		=	gcc
-
-RM		=	rm -f
+MAKEMLX =  cd ./${MLX_D}/ && ${MAKE}
 
 all:		${NAME}
 
 ${NAME}:	${OBJS}
-			${MAKELIBFT}
-			${MAKEGNL}
-			${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${MINILIBX} ${DIRLIBFT} ${DIRGNL}
+			$(MAKELIBFT)
+			$(MAKEGNL)
+			$(MAKEMLX)
+			$(CC) $(CFLAGS) $(INC) $(OBJS) $(LIBFT) $(GNL) $(MLX) $(MLX_FLAGS) -o $@
 
 clean:
-			${RM} ${OBJS}
-			${MAKELIBFT} clean
-			${MAKEGNL} clean
+			rm -rf $(OBJS)
+			$(MAKELIBFT) clean
+			$(MAKEGNL) clean
+			$(MAKEMLX) clean
 
 fclean:		clean
-			${RM} ${NAME}
-			${MAKELIBFT} fclean
-			${MAKEGNL} fclean
+			rm -rf $(NAME)
+			$(MAKELIBFT) fclean
+			$(MAKEGNL) fclean
+			$(MAKEMLX) clean
 
-re:			fclean ${NAME}
-			${MAKELIBFT} re
-			${MAKEGNL} re
+re:			fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re bonus
