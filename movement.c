@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 12:16:27 by josuna-t          #+#    #+#             */
-/*   Updated: 2022/10/10 15:55:58 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/13 11:36:57 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,22 @@ int	movecharacter(void *ptr)
 		ptrs->player.y = ptrs->player.ncordy;
 	}
 	raycaster(*ptrs, -1);
-//	print_minimap(*ptrs);
+	print_minimap(*ptrs);
 	ptr = ptrs;
 	usleep(10000);
+	return (0);
+}
+
+int	movemouse(int x, int y, void *ptr)
+{
+	t_content	*ptrs;
+
+	ptrs = ptr;
+	(void)y;
+	if (x > 0)
+		ptrs->player.rotpressed = R_TURN;
+	if (x < 0)
+		ptrs->player.rotpressed = L_TURN;
 	return (0);
 }
 

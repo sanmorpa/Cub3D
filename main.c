@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 10:10:48 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/10 15:56:02 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/13 11:44:07 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	raycaster(info, -1);
-//	print_minimap(info);
+	print_minimap(info);
 	mlx_hook(info.win_ptr, 17, 0, ft_red_cross, (void *)&info);
 	mlx_hook(info.win_ptr, 2, 0, keypress, &info);
 	mlx_hook(info.win_ptr, 3, 0, keyrelease, &info);
+//	mlx_hook(info.mlx_ptr, 6, 0, movemouse, &info);
 	mlx_loop_hook(info.mlx_ptr, movecharacter, &info);
 	mlx_loop(info.mlx_ptr);
 	ft_free(info.map.map, info.map.y);

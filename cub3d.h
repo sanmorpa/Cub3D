@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 10:13:55 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/10 16:03:28 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/13 11:37:51 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define RIGHT		2
 # define L_TURN		123
 # define R_TURN		124
-# define MINI_TILE	16
+# define MINI_TILE	20
 # define IMG_SIZE	1080
 # define ANGLE		90
 # define W			1024
@@ -130,6 +130,12 @@ typedef struct s_ray
 	int		drawstart;
 	int		drawend;
 	int		lineheight;
+	double	wallx;
+	double	wally;
+	int		texx;
+	int		texy;
+	double	step;
+	double	texpos;
 }	t_ray;
 
 int				error_msg(char *msg);
@@ -155,9 +161,9 @@ int				ft_red_cross(t_content *info);
 t_player		position_player(char **map);
 int				keypress(int keycode, void *ptr);
 int				keyrelease(int keycode, void *ptr);
+int				movemouse(int x, int y, void *ptr);
 int				movecharacter(void *ptr);
 void			raycaster(t_content info, int start);
-void			print_player(int x, int y, t_content info);
 unsigned long	rgba_to_hex(int r, int g, int b, int a);
 unsigned long	rgb_to_hex(int r, int g, int b);
 void			my_mlx_pixel_put(t_image *img, int x, int y, uint32_t color);

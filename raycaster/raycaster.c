@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 14:25:25 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/10 15:59:43 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/13 15:31:42 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ static t_ray	fill_raycaster(t_content info, int x)
 
 static t_image	choose_image(t_ray *ray, t_content info)
 {
-	if (ray->side == 0 && ray->raydirx < 0) //Norte
+	if (ray->side == 0 && ray->raydirx < 0)
 		return (info.images.no);
-	else if (ray->side == 0 && ray->raydirx > 0) //south
+	else if (ray->side == 0 && ray->raydirx > 0)
 		return (info.images.so);
-	else if (ray->side == 1 && ray->raydiry < 0) //west
+	else if (ray->side == 1 && ray->raydiry < 0)
 		return (info.images.we);
-	return (info.images.ea);//east
+	return (info.images.ea);
 }
 
 void	cast_texture(t_content info, t_ray *ray, int x, t_image *to_print)
@@ -74,17 +74,24 @@ void	cast_texture(t_content info, t_ray *ray, int x, t_image *to_print)
 	t_image		img;
 	int			y;
 	uint32_t	color;
+	int			pitch;
 
-	color = 0;
+	pitch = 100;
 	y = -1;
 	img = choose_image(ray, info);
+	ray->texx = (int)(ray->wallx * (double)(img.width));
+	if ((ray->side == 0 && ray->raydirx > 0) || (ray->side == 1 && ray->raydiry < 0))
+		ray->texx = img.width - ray->texx - 1;
+	ray->step = 1.0 * img.height / ray->lineheight;
+	ray->texpos = (ray->drawstart - pitch - H / 2 + ray->lineheight / 2) * ray->step;
 	while (++y <= ray->drawstart)
 		my_mlx_pixel_put(to_print, x, y, info.images.c);
 	while (y <= ray->drawend)
 	{
-		color = my_mlx_pixel_get(&img, x, y);
-		my_mlx_pixel_put(to_print, x, y, color);
-		y++;
+		ray->texy = (int)ray->texpos;
+		ray->texpos += ray->step;
+		color = my_mlx_pixel_get(&img, ray->texx, ray->texy);
+		my_mlx_pixel_put(to_print, x, y++, color);
 	}
 	while (y < H)
 		my_mlx_pixel_put(to_print, x, y++, info.images.f);
@@ -92,15 +99,25 @@ void	cast_texture(t_content info, t_ray *ray, int x, t_image *to_print)
 
 static void	draw_ray(t_content info, t_ray *ray, int x, t_image *to_print)
 {
+	int	pitch;
+
+	pitch = 100;
 	if (ray->side == 0)
+	{
 		ray->prepwalldist = ray->sidedistx - ray->deltadistx;
+		ray->wallx = info.player.y + ray->prepwalldist + ray->raydiry;
+	}
 	else
+	{
 		ray->prepwalldist = ray->sidedisty - ray->deltadisty;
+		ray->wallx = info.player.x + ray->prepwalldist + ray->raydirx;
+	}
+	ray->wallx -= floor(ray->wallx);
 	ray->lineheight = (int)(H / ray->prepwalldist);
-	ray->drawstart = -ray->lineheight / 2 + H / 2;
+	ray->drawstart = -ray->lineheight / 2 + H / 2 + pitch;
 	if (ray->drawstart < 0)
 		ray->drawstart = 0;
-	ray->drawend = ray->lineheight / 2 + H / 2;
+	ray->drawend = ray->lineheight / 2 + H / 2 + pitch;
 	if (ray->drawend >= H)
 		ray->drawend = H - 1;
 	cast_texture(info, ray, x, to_print);
@@ -138,4 +155,5 @@ void	raycaster(t_content info, int start)
 		draw_ray(info, &ray, start, &to_print);
 	}
 	mlx_put_image_to_window(info.mlx_ptr, info.win_ptr, to_print.ptr, 0, 0);
+	mlx_destroy_image(info.mlx_ptr, to_print.ptr);
 }

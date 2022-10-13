@@ -12,11 +12,12 @@
 
 #include "../cub3d.h"
 
-static void	print_square(int x, int y, t_content info, int color)
+static void	print_square(int x, int y, t_content info, int color, int mtile, int mtile2)
 {
 	int	i;
 	int	j;
-
+	mtile = 0;
+	mtile2 = 0;
 	i = y;
 	while (i < (y + MINI_TILE))
 	{
@@ -54,37 +55,51 @@ void	print_player(int x, int y, t_content info)
 
 void	print_minimap(t_content info)
 {
-	int	i;
-	int	j;
 	int posx;
 	int posy;
+	int mtile;
+	int mtile2;
+	int playerposx;
+	int playerposy;
 
 	posx = 0;
 	posy = 0;
-	i = -1;
-	while (info.map.map[++i])
+	mtile = 0;
+	mtile2 = 0;
+	playerposx = 70;
+	playerposy = 70;
+
+	if (info.player.y -3 < 0)
+		posy = 0;
+	else
+		posy = info.player.y - 3;
+	while (info.map.map[posy] && posy <= info.player.y + 3)
 	{
-		j = -1;
-		while (info.map.map[i][++j])
+		if (info.player.x -3 < 0)
+			posx = 0;
+		else
+			posx = info.player.x - 3;
+		while (info.map.map[posy][posx] && posx <= info.player.x + 3)
 		{
-			if (((info.player.x - j) < 3 && (info.player.x - j) > -3) && (info.player.y - i) < 3 && (info.player.y - i) > -3)
-			{
-				if (posx == 0)
-					posx = i - 1;
-				if (posy == 0)
-					posy = j - 1;
-				if (info.map.map[i][j] == '1')
-					print_square((j - posy) * MINI_TILE, (i - posx) * MINI_TILE, info, RED);
-				else if (info.map.map[i][j] == 'O')
-					print_square((j - posy) * MINI_TILE, (i - posx) * MINI_TILE, info, GREY);
-				else if (info.map.map[i][j] == 'N' || info.map.map[i][j] == 'S'
-					|| info.map.map[i][j] == 'W' || info.map.map[i][j] == 'E')
-					print_square((j - posy) * MINI_TILE, (i - posx) * MINI_TILE, info, GREY);
-				else
-					print_square((j - posy) * MINI_TILE, (i - posx) * MINI_TILE, info, TRANS);
-				print_player(info.player.x * MINI_TILE, info.player.y
-					* MINI_TILE, info);
-			}
+			if (info.map.map[posy][posx] == '1')
+				print_square(mtile, mtile2, info, RED, mtile, mtile2);
+			else if (info.map.map[posy][posx] == 'O')
+				print_square(mtile, mtile2, info, GREY, mtile, mtile2);
+			else if (info.map.map[posy][posx] == 'N' || info.map.map[posy][posx] == 'S'
+				|| info.map.map[posy][posx] == 'W' || info.map.map[posy][posx] == 'E')
+				print_square(mtile, mtile2, info, GREY, mtile, mtile2);
+			else
+				print_square(mtile, mtile2, info, TRANS, mtile, mtile2);
+			if (info.player.x -3 < 0)
+				playerposx = info.player.x * MINI_TILE;
+			if (info.player.y -3 < 0)
+				playerposy = info.player.y * MINI_TILE;
+			print_player(playerposx, playerposy, info);
+			posx++;
+			mtile+=MINI_TILE;
 		}
+		mtile = 0;
+		mtile2+=MINI_TILE;
+		posy++;
 	}
 }
