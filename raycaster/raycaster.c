@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 14:25:25 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/13 15:31:42 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/14 15:07:59 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,18 @@ void	cast_texture(t_content info, t_ray *ray, int x, t_image *to_print)
 	t_image		img;
 	int			y;
 	uint32_t	color;
-	int			pitch;
 
-	pitch = 100;
 	y = -1;
 	img = choose_image(ray, info);
 	ray->texx = (int)(ray->wallx * (double)(img.width));
-	if ((ray->side == 0 && ray->raydirx > 0) || (ray->side == 1 && ray->raydiry < 0))
+	if ((ray->side == 0 && ray->raydirx > 0) || (ray->side == 1
+			&& ray->raydiry < 0))
 		ray->texx = img.width - ray->texx - 1;
 	ray->step = 1.0 * img.height / ray->lineheight;
-	ray->texpos = (ray->drawstart - pitch - H / 2 + ray->lineheight / 2) * ray->step;
-	while (++y <= ray->drawstart)
+	ray->texpos = (ray->drawstart - H / 2 + ray->lineheight / 2) * ray->step;
+	while (++y < ray->drawstart)
 		my_mlx_pixel_put(to_print, x, y, info.images.c);
-	while (y <= ray->drawend)
+	while (y < ray->drawend)
 	{
 		ray->texy = (int)ray->texpos;
 		ray->texpos += ray->step;
@@ -99,9 +98,6 @@ void	cast_texture(t_content info, t_ray *ray, int x, t_image *to_print)
 
 static void	draw_ray(t_content info, t_ray *ray, int x, t_image *to_print)
 {
-	int	pitch;
-
-	pitch = 100;
 	if (ray->side == 0)
 	{
 		ray->prepwalldist = ray->sidedistx - ray->deltadistx;
@@ -114,10 +110,10 @@ static void	draw_ray(t_content info, t_ray *ray, int x, t_image *to_print)
 	}
 	ray->wallx -= floor(ray->wallx);
 	ray->lineheight = (int)(H / ray->prepwalldist);
-	ray->drawstart = -ray->lineheight / 2 + H / 2 + pitch;
+	ray->drawstart = -ray->lineheight / 2 + H / 2;
 	if (ray->drawstart < 0)
 		ray->drawstart = 0;
-	ray->drawend = ray->lineheight / 2 + H / 2 + pitch;
+	ray->drawend = ray->lineheight / 2 + H / 2;
 	if (ray->drawend >= H)
 		ray->drawend = H - 1;
 	cast_texture(info, ray, x, to_print);
@@ -128,10 +124,12 @@ void	raycaster(t_content info, int start)
 	t_ray	ray;
 	t_image	to_print;
 
+	mlx_clear_window(info.mlx_ptr, info.win_ptr);
 	to_print.ptr = mlx_new_image(info.mlx_ptr, W, H);
 	to_print.height = H;
 	to_print.width = W;
-	to_print.mem_adress = mlx_get_data_addr(to_print.ptr, &to_print.bpp, &to_print.size_line, &to_print.endian);
+	to_print.mem_adress = mlx_get_data_addr(to_print.ptr, &to_print.bpp,
+			&to_print.size_line, &to_print.endian);
 	while (++start < W)
 	{
 		ray = fill_raycaster(info, start);
