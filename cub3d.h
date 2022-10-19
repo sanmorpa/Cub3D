@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 10:13:55 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/14 15:58:33 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/13 11:37:51 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,16 @@
 # define ANGLE		90
 # define W			1024
 # define H			600
+# define TRANS		0xFF000000
+# define GREEN		0x00006400
 # define GREY		0x20D3D3D3
-# define BLUE		0x0000008B
+# define ORANGE		0x0000008B
 # define RED		0x206D2F2E
+# define BLUE		0x001167B1
+# define L_ORANGE	0x00EE9F27
+# define D_ORANGE	0x00D24E01
+# define L_PINK		0x00FE7F9C
+# define D_PINK		0x009E4244
 
 typedef struct s_ptr
 {

@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 09:57:42 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/14 15:58:48 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/05 13:06:35 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ void	print_player(int x, int y, t_content info)
 		x = info.player.x * MINI_TILE;
 	if (info.player.y -3.5 < 0)
 		y = info.player.y * MINI_TILE;
-	mlx_pixel_put(info.mlx_ptr, info.win_ptr, x, y, BLUE);
+	mlx_pixel_put(info.mlx_ptr, info.win_ptr, x, y, ORANGE);
 	aux_x = x - 1;
 	aux_y = y - 1;
 	while (aux_x < x + 2)
-		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, BLUE);
+		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, ORANGE);
 	aux_y--;
 	aux_x = x - 2;
 	while (aux_x < x + 3)
-		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, BLUE);
+		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, ORANGE);
 	aux_y--;
 	aux_x = x - 1;
 	while (aux_x < x + 2)
-		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, BLUE);
+		mlx_pixel_put(info.mlx_ptr, info.win_ptr, aux_x++, aux_y, ORANGE);
 	aux_y--;
-	mlx_pixel_put(info.mlx_ptr, info.win_ptr, x, aux_y, BLUE);
+	mlx_pixel_put(info.mlx_ptr, info.win_ptr, x, aux_y, ORANGE);
 }
 
 void	print_minimap(t_content info)

@@ -6,7 +6,7 @@
 /*   By: samoreno <samoreno@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 14:25:25 by samoreno          #+#    #+#             */
-/*   Updated: 2022/10/14 15:07:59 by samoreno         ###   ########.fr       */
+/*   Updated: 2022/10/19 11:44:24 by samoreno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,12 @@ static void	draw_ray(t_content info, t_ray *ray, int x, t_image *to_print)
 	if (ray->side == 0)
 	{
 		ray->prepwalldist = ray->sidedistx - ray->deltadistx;
-		ray->wallx = info.player.y + ray->prepwalldist + ray->raydiry;
+		ray->wallx = info.player.y + ray->prepwalldist * ray->raydiry;
 	}
 	else
 	{
 		ray->prepwalldist = ray->sidedisty - ray->deltadisty;
-		ray->wallx = info.player.x + ray->prepwalldist + ray->raydirx;
+		ray->wallx = info.player.x + ray->prepwalldist * ray->raydirx;
 	}
 	ray->wallx -= floor(ray->wallx);
 	ray->lineheight = (int)(H / ray->prepwalldist);
